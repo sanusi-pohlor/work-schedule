@@ -1,82 +1,96 @@
 <template>
-  <div class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-    <div class="bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-md text-white">
-      <h2 class="text-2xl font-bold mb-4">Create New Card</h2>
-      <form @submit.prevent="submitForm">
-        <div class="mb-4">
-          <label for="title" class="block text-sm font-medium text-gray-300">Title</label>
+  <div class="fixed inset-0 bg-purple-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity duration-300">
+    <div class="bg-white/95 border border-purple-100 p-8 rounded-3xl shadow-2xl w-full max-w-lg text-gray-800 transform transition-all duration-300 scale-100">
+      <h2 class="text-3xl font-bold mb-6 text-purple-700">
+        {{ isEditing ? '✏️ แก้ไขงาน' : '✨ สร้างงานใหม่' }}
+      </h2>
+      <form @submit.prevent="submitForm" class="space-y-5">
+        <div>
+          <label for="title" class="block text-sm font-bold text-gray-700 mb-1">หัวข้องาน</label>
           <input
             type="text"
             id="title"
             v-model="formData.title"
-            class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            class="block w-full rounded-2xl bg-purple-50/50 border-purple-100 text-gray-800 shadow-sm focus:border-purple-400 focus:ring-purple-400 transition-colors p-3"
+            placeholder="เช่น ทบทวนเอกสารโปรเจค..."
             required
           />
         </div>
-        <div class="mb-4">
-          <label for="details" class="block text-sm font-medium text-gray-300">Details</label>
+        
+        <div>
+          <label for="details" class="block text-sm font-bold text-gray-700 mb-1">รายละเอียด</label>
           <textarea
             id="details"
             v-model="formData.details"
             rows="3"
-            class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            class="block w-full rounded-2xl bg-purple-50/50 border-purple-100 text-gray-800 shadow-sm focus:border-purple-400 focus:ring-purple-400 transition-colors p-3 custom-scrollbar"
+            placeholder="เพิ่มข้อมูลเพิ่มเติม..."
           ></textarea>
         </div>
-        <div class="mb-4">
-          <label for="creationDate" class="block text-sm font-medium text-gray-300">Creation Date</label>
-          <input
-            type="date"
-            id="creationDate"
-            v-model="formData.creationDate"
-            class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            required
-          />
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="creationDate" class="block text-sm font-bold text-gray-700 mb-1">วันที่สร้าง</label>
+            <input
+              type="date"
+              id="creationDate"
+              v-model="formData.creationDate"
+              class="block w-full rounded-2xl bg-purple-50/50 border-purple-100 text-gray-800 shadow-sm focus:border-purple-400 focus:ring-purple-400 p-2.5"
+              required
+            />
+          </div>
+          <div>
+            <label for="completionDate" class="block text-sm font-bold text-gray-700 mb-1">กำหนดเสร็จ</label>
+            <input
+              type="date"
+              id="completionDate"
+              v-model="formData.completionDate"
+              class="block w-full rounded-2xl bg-purple-50/50 border-purple-100 text-gray-800 shadow-sm focus:border-purple-400 focus:ring-purple-400 p-2.5"
+            />
+          </div>
         </div>
-        <div class="mb-4">
-          <label for="completionDate" class="block text-sm font-medium text-gray-300">Completion Date</label>
-          <input
-            type="date"
-            id="completionDate"
-            v-model="formData.completionDate"
-            class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
+        
+        <div>
+          <label for="status" class="block text-sm font-bold text-gray-700 mb-1">ความสำคัญ (Priority)</label>
+          <div class="relative">
+            <select
+              id="status"
+              v-model="formData.status"
+              class="block w-full rounded-2xl bg-purple-50/50 border-purple-100 text-gray-800 shadow-sm focus:border-purple-400 focus:ring-purple-400 p-3 appearance-none"
+            >
+              <option value="normal">🌱 ปกติ (Normal)</option>
+              <option value="medium">⭐ ปานกลาง (Medium)</option>
+              <option value="urgent">🎀 ด่วน (Urgent)</option>
+            </select>
+          </div>
         </div>
-        <div class="mb-4">
-          <label for="status" class="block text-sm font-medium text-gray-300">Status</label>
-          <select
-            id="status"
-            v-model="formData.status"
-            class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          >
-            <option value="normal">Normal</option>
-            <option value="medium">Medium</option>
-            <option value="urgent">Urgent</option>
-          </select>
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-300">Choose Color</label>
-          <div class="mt-1 grid grid-cols-5 gap-2">
+        
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-2">สีการ์ดงาน (โทนพาสเทล)</label>
+          <div class="flex flex-wrap gap-3">
             <div
               v-for="colorOption in colorOptions"
               :key="colorOption"
-              :class="[colorOption, 'w-8 h-8 rounded-full cursor-pointer border-2', { 'border-blue-400': formData.color === colorOption, 'border-transparent': formData.color !== colorOption }]"
+              :class="[colorOption, 'w-10 h-10 rounded-full cursor-pointer transition-transform hover:scale-110 shadow-sm border border-black/5', { 'ring-4 ring-purple-300 scale-110 shadow-md': formData.color === colorOption }]"
               @click="formData.color = colorOption"
+              :title="colorOption.replace('bg-', '').replace('-100', '')"
             ></div>
           </div>
         </div>
-        <div class="flex justify-end space-x-3">
+        
+        <div class="flex justify-end space-x-3 pt-4 border-t border-purple-100 mt-6">
           <button
             type="button"
             @click="cancelForm"
-            class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            class="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-2xl hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 font-bold"
           >
-            Cancel
+            ยกเลิก
           </button>
           <button
             type="submit"
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="px-5 py-2.5 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-2xl hover:from-purple-500 hover:to-pink-500 shadow-md shadow-purple-200 transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-purple-300 font-bold"
           >
-            Create Card
+            {{ isEditing ? 'บันทึก' : 'สร้างงาน' }}
           </button>
         </div>
       </form>
@@ -85,7 +99,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, onMounted } from 'vue';
+
+const props = defineProps({
+  initialData: {
+    type: Object,
+    default: null
+  }
+});
 
 const emit = defineEmits(['submit', 'cancel']);
 
@@ -96,17 +117,26 @@ const formData = ref({
   details: '',
   creationDate: today,
   completionDate: '',
-  status: 'normal', // Default status
-  color: 'bg-blue-500', // Default color
+  status: 'normal',
+  color: 'bg-blue-100',
 });
 
+const isEditing = ref(false);
+
 const colorOptions = [
-  'bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500',
-  'bg-pink-500', 'bg-indigo-500', 'bg-teal-500', 'bg-orange-500', 'bg-gray-500',
+  'bg-slate-100', 'bg-blue-100', 'bg-emerald-100', 'bg-amber-100', 'bg-rose-100',
+  'bg-purple-100', 'bg-pink-100', 'bg-indigo-100', 'bg-teal-100', 'bg-orange-100',
 ];
 
+onMounted(() => {
+  if (props.initialData) {
+    isEditing.value = true;
+    formData.value = { ...props.initialData };
+  }
+});
+
 const submitForm = () => {
-  emit('submit', formData.value);
+  emit('submit', { ...formData.value });
   resetForm();
 };
 
@@ -122,7 +152,8 @@ const resetForm = () => {
     creationDate: today,
     completionDate: '',
     status: 'normal',
-    color: 'bg-blue-500',
+    color: 'bg-blue-100',
   };
+  isEditing.value = false;
 };
 </script>
