@@ -1,16 +1,23 @@
-# work-schedule
+# Work Schedule
 
-This template should help get you started developing with Vue 3 in Vite.
+A work scheduling application built with Vue 3 and Vite.
 
-## Recommended IDE Setup
+## 🛠 Technology Stack
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Framework:** [Vue 3](https://vuejs.org/) (Composition API)
+- **Build Tool:** [Vite](https://vitejs.dev/)
+- **State Management:** [Pinia](https://pinia.vuejs.org/)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/) & [Flowbite](https://flowbite.com/)
+- **Drag & Drop:** [VueDraggable](https://github.com/SortableJS/vue.draggable.next)
+- **Utilities:** [VueUse](https://vueuse.org/)
 
-## Customize configuration
+## 💻 Recommended IDE Setup
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+[VSCode](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (previously Volar).
 
-## Project Setup
+## 🚀 Project Setup
+
+Install the project dependencies:
 
 ```sh
 npm install
@@ -18,12 +25,24 @@ npm install
 
 ### Compile and Hot-Reload for Development
 
+Start the development server:
+
 ```sh
 npm run dev
 ```
 
 ### Compile and Minify for Production
 
+Build the application for production deployment:
+
 ```sh
 npm run build
+```
+
+### Preview Production Build
+
+Locally preview the production build:
+
+```sh
+npm run preview
 ```
